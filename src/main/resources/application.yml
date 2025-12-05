@@ -1,6 +1,12 @@
 spring:
   application:
     name: lzl-ai-agent
+  ai:
+    dashscope:
+      api-key: sk-11d21bc129044becadb43a491cc5f410
+      chat:
+        options:
+          model: qwen-plus
 
 server:
   port: 8080
