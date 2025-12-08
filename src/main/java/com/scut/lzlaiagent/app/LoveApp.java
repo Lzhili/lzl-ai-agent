@@ -1,6 +1,7 @@
 package com.scut.lzlaiagent.app;
 
 import com.scut.lzlaiagent.advisor.MyLoggerAdvisor;
+import com.scut.lzlaiagent.advisor.ReReadingAdvisor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -31,8 +32,9 @@ public class LoveApp {
         chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
-                        new MessageChatMemoryAdvisor(chatMemory),
-                        new MyLoggerAdvisor()
+                        new MessageChatMemoryAdvisor(chatMemory)
+                        //new MyLoggerAdvisor(),
+                        //new ReReadingAdvisor()
                 )
                 .build();
     }
