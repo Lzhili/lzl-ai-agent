@@ -2,6 +2,7 @@ package com.scut.lzlaiagent;
 
 import cn.hutool.core.lang.UUID;
 import com.scut.lzlaiagent.app.LoveApp;
+import com.scut.lzlaiagent.pojo.LoveReport;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -29,5 +30,15 @@ class LoveAppTest {
         answer = loveApp.doChat(message, chatId);
         Assertions.assertNotNull(answer);
     }
+
+    @Test
+    void doChatWithReport() {
+        String chatId = UUID.randomUUID().toString();
+
+        String message = "你好，我是学生小明，我想让另一半（小红）更爱我，但我不知道该怎么做";
+        LoveReport loveReport = loveApp.doChatWithReport(message, chatId);
+        Assertions.assertNotNull(loveReport);
+    }
+
 }
 

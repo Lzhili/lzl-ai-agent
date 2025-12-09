@@ -82,6 +82,12 @@
             <version>1.0.0-beta2</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.victools</groupId>
+            <artifactId>jsonschema-generator</artifactId>
+            <version>4.38.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
