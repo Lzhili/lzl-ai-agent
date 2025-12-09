@@ -2,6 +2,7 @@ package com.scut.lzlaiagent.app;
 
 import com.scut.lzlaiagent.advisor.MyLoggerAdvisor;
 import com.scut.lzlaiagent.advisor.ReReadingAdvisor;
+import com.scut.lzlaiagent.chatMemory.FileBasedChatMemory;
 import com.scut.lzlaiagent.pojo.LoveReport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -29,17 +30,24 @@ public class LoveApp {
     //这里的dashscopeChatModel在spring ai alibaba的起步依赖中就引入了，因此LoveApp可以直接从IOC容器中获取
     public LoveApp(ChatModel dashscopeChatModel) {
 
+        // 初始化基于文件的对话记忆
+        // String fileDir = System.getProperty("user.dir") + "/chat-memory";
+        // ChatMemory chatMemory = new FileBasedChatMemory(fileDir);
+
+        // 初始化基于内存的对话记忆
         ChatMemory chatMemory = new InMemoryChatMemory();
+
         chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
-                        new MessageChatMemoryAdvisor(chatMemory),
-                        new MyLoggerAdvisor()
+                        new MessageChatMemoryAdvisor(chatMemory)
+                        //new MyLoggerAdvisor()
                         //new ReReadingAdvisor()
                 )
                 .build();
     }
 
+    //普通输出
     public String doChat(String message, String chatId) {
         ChatResponse response = chatClient
                 .prompt()
