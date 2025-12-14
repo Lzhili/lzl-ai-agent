@@ -88,6 +88,9 @@ public class LoveApp {
     @Resource
     private Advisor loveAppRagCloudAdvisor;
 
+    @Resource
+    private VectorStore pgVectorVectorStore;
+
     // 应用 RAG 知识库进行对话
     public String doChatWithRag(String message, String chatId) {
         ChatResponse chatResponse = chatClient
@@ -100,7 +103,9 @@ public class LoveApp {
                 // 应用 RAG 知识库问答（本地）
                 //.advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
                 // 应用 RAG 检索增强服务（基于云知识库服务）
-                .advisors(loveAppRagCloudAdvisor)
+                //.advisors(loveAppRagCloudAdvisor)
+                // 应用 RAG 检索增强服务（基于PgVector服务）
+                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
