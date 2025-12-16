@@ -35,13 +35,15 @@ class LoveAppDocumentLoader {
 
             Resource[] resources = resourcePatternResolver.getResources("classpath:document/*.md");
             for (Resource resource : resources) {
-                String fileName = resource.getFilename();
+                String fileName = resource.getFilename(); // 获取文件名
+                String status = fileName.substring(fileName.length()-6, fileName.length()-4); // 获取文件名中的状态(单身，恋爱，已婚)
                 MarkdownDocumentReaderConfig config = MarkdownDocumentReaderConfig.builder()
                         .withHorizontalRuleCreateDocument(true) // 添加段落分隔符
                         .withIncludeCodeBlock(false) // 忽略代码块
                         .withIncludeBlockquote(false) // 忽略引用
                         // 添加元数据，提取文档的文件名（fileName）作为文档的元信息‌，可以便于后续知识库实现更精确的检索。
                         .withAdditionalMetadata("filename", fileName)
+                        .withAdditionalMetadata("status", status)
                         .build();
                 MarkdownDocumentReader reader = new MarkdownDocumentReader(resource, config);
                 allDocuments.addAll(reader.get());

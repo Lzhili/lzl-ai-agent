@@ -4,6 +4,7 @@ import com.scut.lzlaiagent.advisor.MyLoggerAdvisor;
 import com.scut.lzlaiagent.advisor.ReReadingAdvisor;
 import com.scut.lzlaiagent.chatMemory.FileBasedChatMemory;
 import com.scut.lzlaiagent.pojo.LoveReport;
+import com.scut.lzlaiagent.rag.LoveAppRagCustomAdvisorFactory;
 import com.scut.lzlaiagent.rag.QueryRewriter;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -107,11 +108,13 @@ public class LoveApp {
                 // 添加日志，便于观察效果
                 .advisors(new MyLoggerAdvisor())
                 // 应用 RAG 知识库问答（本地）
-                .advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
+                //.advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
                 // 应用 RAG 检索增强服务（基于云知识库服务）
                 //.advisors(loveAppRagCloudAdvisor)
                 // 应用 RAG 检索增强服务（基于PgVector服务）
                 //.advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
+                // 应用自定义 RAG 检索增强服务（比如文档过滤）
+                .advisors(LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore, "单身"))
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
