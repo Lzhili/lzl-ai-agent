@@ -17,7 +17,7 @@ import static org.springframework.ai.vectorstore.pgvector.PgVectorStore.PgIndexT
 /**
  * PostgreSQL向量数据库存储配置（初始化基于PostgreSQL的向量数据库Bean）
  */
-@Configuration
+//@Configuration //需要时候取消注释
 public class PgVectorVectorStoreConfig {
 
     @Resource
