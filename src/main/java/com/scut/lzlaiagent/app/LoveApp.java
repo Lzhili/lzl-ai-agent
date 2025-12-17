@@ -113,7 +113,7 @@ public class LoveApp {
                 //.advisors(loveAppRagCloudAdvisor)
                 // 应用 RAG 检索增强服务（基于PgVector服务）
                 //.advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
-                // 应用自定义 RAG 检索增强服务（比如文档过滤）
+                // 应用自定义 RAG 检索增强服务（比如文档过滤 + 上下文增强器）
                 .advisors(LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore, "单身"))
                 .call()
                 .chatResponse();
