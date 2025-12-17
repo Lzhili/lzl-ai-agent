@@ -34,3 +34,5 @@ build/
 
 # Ignore tmp directory
 /tmp/
+
+application.yml
