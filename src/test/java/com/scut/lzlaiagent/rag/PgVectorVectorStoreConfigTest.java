@@ -1,4 +1,4 @@
-package com.scut.lzlaiagent;
+package com.scut.lzlaiagent.rag;
 
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;

@@ -1,4 +1,4 @@
-package com.scut.lzlaiagent;
+package com.scut.lzlaiagent.rag;
 
 import com.scut.lzlaiagent.demo.rag.MultiQueryExpanderDemo;
 import jakarta.annotation.Resource;
