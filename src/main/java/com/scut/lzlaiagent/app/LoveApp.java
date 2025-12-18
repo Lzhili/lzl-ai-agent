@@ -16,6 +16,7 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.vectorstore.VectorStore;
 
 import org.springframework.stereotype.Component;
@@ -34,7 +35,11 @@ public class LoveApp {
             "恋爱状态询问沟通、习惯差异引发的矛盾；已婚状态询问家庭责任与亲属关系处理的问题。" +
             "引导用户详述事情经过、对方反应及自身想法，以便给出专属解决方案。";
 
-    //这里的dashscopeChatModel在spring ai alibaba的起步依赖中就引入了，因此LoveApp可以直接从IOC容器中获取
+    /**
+    * 初始化ChatClient实例
+    * 这里的dashscopeChatModel在spring ai alibaba的起步依赖中就引入了，因此LoveApp可以直接从IOC容器中获取
+    * @param dashscopeChatModel
+     */
     public LoveApp(ChatModel dashscopeChatModel) {
 
         // 初始化基于文件的对话记忆
@@ -54,7 +59,13 @@ public class LoveApp {
                 .build();
     }
 
-    //普通输出
+    /**
+     * AI 基础对话（支持多轮对话记忆）
+     *
+     * @param message
+     * @param chatId
+     * @return
+     */
     public String doChat(String message, String chatId) {
         ChatResponse response = chatClient
                 .prompt()
@@ -68,7 +79,13 @@ public class LoveApp {
         return content;
     }
 
-    //结构化输出
+    /**
+     * AI 恋爱报告功能（实战结构化输出）
+     *
+     * @param message
+     * @param chatId
+     * @return
+     */
     public LoveReport doChatWithReport(String message, String chatId){
         LoveReport loveReport = chatClient
                 .prompt()
@@ -96,7 +113,13 @@ public class LoveApp {
     @Resource
     private QueryRewriter queryRewriter;
 
-    // 应用 RAG 知识库进行对话
+    /**
+     * 和 RAG 知识库进行对话
+     *
+     * @param message
+     * @param chatId
+     * @return
+     */
     public String doChatWithRag(String message, String chatId) {
         // 查询重写
         String rewrittenMessage = queryRewriter.doQueryRewrite(message);
@@ -119,6 +142,36 @@ public class LoveApp {
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
         log.info("RAG content: {}", content);
+        return content;
+    }
+
+
+    // AI 恋爱报告功能（支持工具调用）
+
+    @Resource
+    private ToolCallback[] allTools;
+
+    /**
+     * AI 恋爱报告功能（支持调用工具Tool Calling）
+     *
+     * @param message
+     * @param chatId
+     * @return
+     */
+    public String doChatWithTools(String message, String chatId) {
+        ChatResponse response = chatClient
+                .prompt()
+                .user(message)
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
+                // 开启日志，便于观察效果
+                .advisors(new MyLoggerAdvisor())
+                // 绑定所有已注册的‌工具
+                .tools(allTools)
+                .call()
+                .chatResponse();
+        String content = response.getResult().getOutput().getText();
+        log.info("Tool Calling content: {}", content);
         return content;
     }
 }
