@@ -36,3 +36,4 @@ build/
 /tmp/
 
 application.yml
+mcp-servers.json
