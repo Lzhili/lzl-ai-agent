@@ -30,3 +30,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+application.yml
+application-stdio.yml
+application-sse.yml
