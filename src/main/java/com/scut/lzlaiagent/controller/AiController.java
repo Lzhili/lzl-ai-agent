@@ -1,5 +1,6 @@
 package com.scut.lzlaiagent.controller;
 
+import com.scut.lzlaiagent.agent.LzlManus;
 import com.scut.lzlaiagent.app.LoveApp;
 import jakarta.annotation.Resource;
 import org.springframework.ai.chat.model.ChatModel;
@@ -88,5 +89,17 @@ public class AiController {
                 }, sseEmitter::completeWithError, sseEmitter::complete);
         // 返回
         return sseEmitter;
+    }
+
+    /**
+     * 流式调用 Manus 超级智能体
+     *
+     * @param message
+     * @return
+     */
+    @GetMapping("/manus/chat")
+    public SseEmitter doChatWithManus(String message) {
+        LzlManus lzlManus = new LzlManus(allTools, dashscopeChatModel);
+        return lzlManus.runStream(message);
     }
 }
